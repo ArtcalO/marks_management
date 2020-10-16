@@ -1,17 +1,12 @@
 <template>
-  <div id="app">
-    
+  <div >
+    <h3>Header</h3>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
-  }
+
 };
 </script>
 
