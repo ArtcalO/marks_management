@@ -20,10 +20,16 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
                     <button
-                            @click.prevent="addMark"
+                            @click.prevent="addCourse"
                             class="btn btn-primary"
                             >Submit!
+                    </button><button
+                            v-if="edit"
+                            @click.prevent="modifyCourse"
+                            class="btn btn-primary"
+                            >Modify!
                     </button>
+                    
                 </div>
             </div>
         </form>
@@ -40,12 +46,31 @@
                               <tr>
                                 <th>ID</th>
                                 <th>Course Name</th>
+                                <th>Actions</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr v-for="(course, index) in courses">
                                 <td>{{ index }}</td>
                                 <td>{{ course }}</td>
+                                <td>
+                                    <button 
+
+                                        type="button" 
+                                        class="btn btn-primary btn-sm" 
+                                        @click="getCourse(course)"
+
+                                        >Edit
+                                    </button>
+                                    <button 
+
+                                        type="button" 
+                                        class="btn btn-danger btn-sm" 
+                                        @click="deleteCourse(index)"
+                                        >Delete
+
+                                    </button>
+                                </td>
                               </tr>
                             </tbody>
                           </table>
@@ -57,18 +82,41 @@
 </template>
 <script>
 export default {
-  props : ['courses'],
+    computed : {
+        courses(){
+            return this.$store.state.courses;
+        }
+    },
   data (){
     return {
         course_name : '',
+        course_index :0,
+        edit : false
         
     }
   },
   methods : {
-    addMark(){
-        console.log(this.course_name);
-        this.$emit('courseCreated', this.course_name);
+    addCourse(){
+        this.$store.state.courses.push(this.course_name);
         this.course_name='';
+    },
+    getCourse(course){
+        this.edit = true;
+        this.course_name = course;
+        this.course_index = this.$store.state.courses.indexOf(this.course_name);
+        cosole.log(this.course_index);
+
+    },
+
+    deleteCourse(index){
+        this.$store.state.courses.splice(index, 1);
+    },
+
+    modifyCourse(){
+        this.$store.state.courses.splice(this.course_index, 1, this.course_name);
+        this.course_name='';
+        this.edit = false;
+
     }
   }
 };
